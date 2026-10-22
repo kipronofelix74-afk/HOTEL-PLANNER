@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Hotel Stay Planner</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+  <nav class="">
+    <div class="container">
+      <span class="navbar-brand text-black fs-9-bold"> 🏨 Hotel Stay Planner</span>
+      <style>
+        body {
+         background: #e0e0e0;
+        border-radius: 40px;
+           box-shadow: 20px 20px 40px #adadad,
+          -20px -20px 40px #ffffff;
+      }
+
+     </style>
+      <span class="save "> Browse, plan and save your stay</span>
+  <img src="image 1.jpg" class="img-fluid" alt="Responsive image">
+  <div class="btn btn-gold">Book and plan today</div>
+  <div class="btn btn-gold">contact us</div>
+    </div>
+  </nav>
+
+  <main class="contat-blue-500 container my-4">
+    <div id="alert-area" aria-live="polite"></div>
+
+    <div class="row g-4">
+  
+      <section class="col-lg-8">
+        <div class="card p-3 mb-3">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label for="search" class="form-label">Search</label>
+              <input id="search" type="text" class="form-control" placeholder="Hotel name or amenity" />
+            </div>
+            <div class="col-md-3">
+              <label for="city-filter" class="form-label">City</label>
+              <select id="city-filter" class="form-select">
+                <option value="all">All cities</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label for="price-filter" class="form-label">Max price: $<span id="price-value">300</span></label>
+              <input id="price-filter" type="range" class="form-range" min="50" max="300" step="10" value="300" />
+            </div>
+            <div class="col-md-2">
+              <label for="sort" class="form-label">Sort</label>
+              <select id="sort" class="form-select">
+                <option value="default">Default</option>
+                <option value="price-asc">Price ↑</option>
+                <option value="price-desc">Price ↓</option>
+                <option value="rating">Rating</option>
+              </select>
+            
+        </div>
+
+        <div id="loading" class="text-center py-5 d-none">
+          <div class="spinner-border text-primary" role="status"></div>
+          <p class="mt-2 text-muted">Loading hotels…</p>
+        </div>
+        <div id="hotel-list" class="row g-3"></div>
+      </section>
+
+      <aside class="col-lg-4">
+        <div class="card p-3 sticky-lg-top planner" id="planner">
+          <h2 class="h5">Plan your stay</h2>
+          <p id="selected-hotel" class="text-muted">Choose a hotel to start planning.</p>
+
+          <form id="plan-form" novalidate>
+            <div class="mb-2">
+              <label for="guest-name" class="form-label">Your name</label>
+              <input id="guest-name" class="form-control" type="text" required />
+            </div>
+            <div class="row g-2 mb-2">
+              <div class="col-6">
+                <label for="check-in" class="form-label">Check-in</label>
+                <input id="check-in" class="form-control" type="date" required />
+              </div>
+              <div class="col-6">
+                <label for="check-out" class="form-label">Check-out</label>
+                <input id="check-out" class="form-control" type="date" required />
+              </div>
+            </div>
+            <div class="row g-2 mb-2">
+              <div class="col-5">
+                <label for="guests" class="form-label">Guests</label>
+                <input id="guests" class="form-control" type="number" min="1" max="10" value="2" required />
+              </div>
+              <div class="col-7">
+                <label for="room-type" class="form-label">Room type</label>
+                <select id="room-type" class="form-select">
+                  <option value="standard">Standard</option>
+                  <option value="deluxe">Deluxe (+30%)</option>
+                  <option value="suite">Suite (+80%)</option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="notes" class="form-label">Notes (optional)</label>
+              <textarea id="notes" class="form-control" rows="2" placeholder="Late arrival, dietary needs…"></textarea>
+            </div>
+
+            <div class="estimate mb-3" id="estimate">Estimated total: —</div>
+            <button id="save-btn" type="submit" class="btn btn-primary w-100" disabled>Save planned stay
+
+            </button>
+          </form>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Saved stays -->
+    <section class="mt-5">
+      <h2 class="h4">My planned stays</h2>
+      <div id="bookings-list" class="row g-3"></div>
+    </section>
+  </main>
+
+  <footer class="text-center text-muted small py-4">Hotel Stay Planner · SPA project</footer>
+
+  <script src="index.js"></script>
+</body>
+</html>

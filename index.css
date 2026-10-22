@@ -1,0 +1,201 @@
+/* .container {
+   button: 8px;
+  right: 16px;
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+/* Bottom left text *
+
+
+/* ===== Hotel Stay Planner: styles ===== */
+:root {
+  --navy: #14213d;
+  --navy-soft: #22345c;
+  --gold: #c9a24b;
+  --gold-dark: #a9842f;
+  --cream: #f6f4ef;
+  --ink: #2b2d33;
+  --muted: #6c7080;
+  --radius: 1rem;
+  --shadow-sm: 0 2px 8px rgba(20, 33, 61, 0.08);
+  --shadow-md: 0 10px 28px rgba(20, 33, 61, 0.14);
+}
+
+body {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+h1, h2, h3, h4, h5, .navbar-brand {
+  font-family: "Playfair Display", Georgia, serif;
+  color: var(--navy);
+}
+
+/* ===== Navbar ===== */
+.site-nav {
+  background: var(--navy);
+  padding: 0.85rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+}
+.site-nav .navbar-brand {
+  color: #fff;
+  font-size: 1.4rem;
+  letter-spacing: 0.3px;
+}
+.site-nav .nav-link-contact {
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 600;
+  border: 1px solid var(--gold);
+  padding: 0.35rem 1rem;
+  border-radius: 50rem;
+  transition: all 0.2s ease;
+}
+.site-nav .nav-link-contact:hover {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+/* ===== Hero ===== */
+.hero {
+  position: relative;
+  min-height: 340px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  background:
+    linear-gradient(135deg, rgba(20, 61, 27, 0.78), rgba(20, 33, 61, 0.35)),
+    url("image 1.jpg") center / cover no-repeat,
+    var(--navy-soft);
+}
+.hero h1 {
+  color: #fff;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 700;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
+.hero p {
+  font-size: 1.15rem;
+  max-width: 34rem;
+  opacity: 0.92;
+}
+.btn-gold {
+  background: var(--gold);
+  border: 0;
+  color: var(--navy);
+  font-weight: 600;
+  padding: 0.7rem 1.6rem;
+  border-radius: 50rem;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.btn-gold:hover {
+  background: var(--gold-dark);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+main {
+  padding-top: 2.5rem;
+  padding-bottom: 2rem;
+}
+.card {
+  border: 0;
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+}
+.planner {
+  top: 5.5rem;
+  border-top: 4px solid var(--navy);
+}
+.form-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--navy);
+  margin-bottom: 0.25rem;
+}
+.form-control,
+.form-select {
+  border-radius: 0.6rem;
+  border: 1px solid #d8d8e0;
+  padding: 0.55rem 0.8rem;
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 0.2rem rgba(201, 162, 75, 0.25);
+}
+.form-range {
+  accent-color: var(--bs-btn-active-bg);
+}
+
+/* ===== Buttons ===== */
+.btn-primary {
+  --bs-btn-bg: var(--navy);
+  --bs-btn-border-color: var(--navy);
+  --bs-btn-hover-bg: var(--navy-soft);
+  --bs-btn-hover-border-color: var(--navy-soft);
+  --bs-btn-active-bg: var(--navy-soft);
+  --bs-btn-active-border-color: var(--navy-soft);
+  --bs-btn-disabled-bg: #9aa0b3;
+  --bs-btn-disabled-border-color: #9aa0b3;
+  border-radius: 0.6rem;
+  font-weight: 600;
+  padding: 0.65rem 1rem;
+}
+.btn-outline-primary {
+  --bs-btn-color: var(--navy);
+  --bs-btn-border-color: var(--navy);
+  --bs-btn-hover-bg: var(--navy);
+  --bs-btn-hover-border-color: var(--navy);
+  border-radius: 0.6rem;
+}
+
+
+.section-title {
+  position: relative;
+  padding-bottom: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+.section-title::after {
+  content: "🏨 Hotel Stay Planner Browse, plan and save your stay ";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 56px;
+  height: 3px;
+  background: var(--gold);
+  border-radius: 2px;
+}
+
+
+.site-footer {
+  background: var(--navy);
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 3rem;
+}
+.btn-gold {
+  background: var(--gold);
+  border: 0;
+  color: var(--navy);
+  font-weight: 600;
+  padding: 0.7rem 1.6rem;
+  border-radius: 50rem;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.btn-gold:hover {
+  background: var(--gold-dark);
+  color: #fff;
+  transform: translateY(-2px);
+}
+@media (max-width: 575.98px) {
+  .hero { min-height: 280px; }
+  .planner { top: 0; }
+}
