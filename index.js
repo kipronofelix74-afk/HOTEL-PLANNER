@@ -41,7 +41,6 @@ function nightsBetween(start, end) {
   return Math.round(ms / (1000 * 60 * 60 * 24));
 }
 
-// Wrapper around fetch with friendly error messages
 async function request(path, options = {}) {
   let response;
   try {
