@@ -1,10 +1,6 @@
-const API_URL = "db.json";
-const ROOM_MULTIPLIERS = { standard: 1, deluxe: 1.3, suite: 1.8 };
-
-let hotels = [];
-let selectedHotel = null;
-
-// ---------- DOM references ----------
+const API_URL = "https:https://kipronofelix74-afk.github.io/HOTEL-PLANNER/";
+const ROOM_MULTIPLIERS ="https://jsonplaceholder.typicode.com/posts"
+ 
 const hotelList = document.getElementById("hotel-list");
 const bookingsList = document.getElementById("bookings-list");
 const loading = document.getElementById("loading");
@@ -12,23 +8,14 @@ const alertArea = document.getElementById("alert-area");
 const searchInput = document.getElementById("search");
 const cityFilter = document.getElementById("city-filter");
 const priceFilter = document.getElementById("price-filter");
-const priceValue = document.getElementById("price-value");
-const sortSelect = document.getElementById("sort");
 const selectedHotelText = document.getElementById("selected-hotel");
-const form = document.getElementById("plan-form");
-const saveBtn = document.getElementById("save-btn");
-const estimate = document.getElementById("estimate");
 const checkIn = document.getElementById("check-in");
 const checkOut = document.getElementById("check-out");
 const guestsInput = document.getElementById("guests");
 const roomType = document.getElementById("room-type");
-
-// ---------- Helpers ----------
-function escapeHtml(text) {
-  const div = document.createElement("div");
-  div.textContent = String(text);
-  return div.innerHTML;
-}
+const estimate = document.getElementById("estimate");
+const form = document.getElementById("planner-form");
+const saveBtn = document.getElementById("save-btn");
 
 function showAlert(message, type = "danger") {
   alertArea.innerHTML = `
@@ -67,7 +54,6 @@ async function request(path, options = {}) {
   if (!response.ok) {
     throw new Error(`The server returned an error (status ${response.status}). Please try again.`);
   }
-  // DELETE returns an empty-ish JSON object, so guard parsing
   return response.json().catch(() => ({}));
 }
 
@@ -107,18 +93,6 @@ function getVisibleHotels() {
     return matchesTerm && matchesCity && h.pricePerNight <= maxPrice;
   });
 
-  switch (sortSelect.value) {
-    case "price-asc":
-      result.sort((a, b) => a.pricePerNight - b.pricePerNight);
-      break;
-    case "price-desc":
-      result.sort((a, b) => b.pricePerNight - a.pricePerNight);
-      break;
-    case "rating":
-      result.sort((a, b) => b.rating - a.rating);
-      break;
-  }
-  return result;
 }
 
 function renderHotels() {
@@ -127,33 +101,6 @@ function renderHotels() {
     hotelList.innerHTML = `<div class="col-12"><div class="alert alert-info">No hotels match your filters. Try widening your search.</div></div>`;
     return;
   }
-
-  hotelList.innerHTML = visible
-    .map(
-      (h) => `
-    <div class="col-md-6">
-      <div class="card hotel-card ${selectedHotel && selectedHotel.id === h.id ? "selected" : ""}">
-        <div class="hotel-banner">${h.emoji}</div>
-        <div class="card-body">
-          <div class="d-flex justify-content-between">
-            <h3 class="h6 mb-1">${escapeHtml(h.name)}</h3>
-            <span class="badge bg-warning text-dark">★ ${h.rating}</span>
-          </div>
-          <p class="text-muted small mb-2">${escapeHtml(h.city)}</p>
-          <p class="small">${escapeHtml(h.description)}</p>
-          <div class="mb-3">
-            ${h.amenities.map((a) => `<span class="badge bg-light text-dark border amenity">${escapeHtml(a)}</span>`).join(" ")}
-          </div>
-          <div class="d-flex justify-content-between align-items-center">
-            <strong>$${h.pricePerNight}<small class="text-muted fw-normal"> / night</small></strong>
-            <button class="btn btn-outline-primary btn-sm" data-plan="${h.id}">Plan stay</button>
-          </div>
-        </div>
-      </div>
-    </div>`
-    )
-    .join("");
-}
 
 // ---------- Planner ----------
 function selectHotel(id) {
@@ -183,16 +130,6 @@ function updateEstimate() {
     : "Estimated total: —";
 }
 
-function validateForm() {
-  const name = document.getElementById("guest-name").value.trim();
-  if (!selectedHotel) return "Please choose a hotel first.";
-  if (!name) return "Please enter your name.";
-  if (!checkIn.value || !checkOut.value) return "Please select both check-in and check-out dates.";
-  if (checkIn.value < today()) return "Check-in date cannot be in the past.";
-  if (nightsBetween(checkIn.value, checkOut.value) <= 0) return "Check-out must be after check-in.";
-  const guests = Number(guestsInput.value);
-  if (!Number.isInteger(guests) || guests < 1 || guests > 10) return "Guests must be between 1 and 10.";
-  return null;
 }
 async function saveBooking(event) {
   event.preventDefault();
@@ -201,23 +138,6 @@ async function saveBooking(event) {
     showAlert(problem, "warning");
     return;
   }
-
-  const { nights, rooms, total } = calculateTotal();
-  const booking = {
-    hotelId: selectedHotel.id,
-    hotelName: selectedHotel.name,
-    city: selectedHotel.city,
-    guestName: document.getElementById("guest-name").value.trim(),
-    checkIn: checkIn.value,
-    checkOut: checkOut.value,
-    guests: Number(guestsInput.value),
-    roomType: roomType.value,
-    notes: document.getElementById("notes").value.trim(),
-    nights,
-    rooms,
-    total,
-  };
-
   saveBtn.disabled = true;
   saveBtn.textContent = "Saving…";
   try {
@@ -255,7 +175,7 @@ function renderBookings(bookings) {
   }
   bookingsList.innerHTML = bookings
     .map(
-      (b) => `
+      (b) => 
     <div class="col-md-6 col-lg-4">
       <div class="card h-100">
         <div class="card-body">
@@ -269,9 +189,8 @@ function renderBookings(bookings) {
             <button class="btn btn-outline-danger btn-sm" data-delete="${b.id}">Remove</button>
           </div>
         </div>
-      </di
-    </div>`v>
-    )
+      </div>
+    </div>
     .join("");
 }
 
