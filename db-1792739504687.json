@@ -1,0 +1,117 @@
+{
+  "hotels": [
+    {
+      "id": 1,
+      "name": "Savannah Rest Lodge",
+      "city": "Nairobi",
+      "pricePerNight": 85,
+      "rating": 4.3,
+      "emoji": "🌳",
+      "amenities": [
+        "Wi-Fi",
+        "Breakfast",
+        "Airport shuttle"
+      ],
+      "description": "Quiet garden stay close to the city centre and the airport road."
+    },
+    {
+      "id": 2,
+      "name": "Skyline Business Hotel",
+      "city": "Nairobi",
+      "pricePerNight": 140,
+      "rating": 4.6,
+      "emoji": "🏙️",
+      "amenities": [
+        "Wi-Fi",
+        "Gym",
+        "Conference rooms"
+      ],
+      "description": "High-floor rooms with skyline views, built for business travellers."
+    },
+    {
+      "id": 3,
+      "name": "Coral Bay Resort",
+      "city": "Mombasa",
+      "pricePerNight": 190,
+      "rating": 4.7,
+      "emoji": "🏖️",
+      "amenities": [
+        "Beach access",
+        "Pool",
+        "Spa"
+      ],
+      "description": "Beachfront resort with a pool, spa and sunset dining terrace."
+    },
+    {
+      "id": 4,
+      "name": "Old Town Courtyard",
+      "city": "Mombasa",
+      "pricePerNight": 70,
+      "rating": 4.1,
+      "emoji": "🕌",
+      "amenities": [
+        "Wi-Fi",
+        "Breakfast",
+        "Rooftop"
+      ],
+      "description": "Swahili-style courtyard rooms a short walk from Fort Jesus."
+    },
+    {
+      "id": 5,
+      "name": "Diani Palm Retreat",
+      "city": "Diani",
+      "pricePerNight": 165,
+      "rating": 4.8,
+      "emoji": "🌴",
+      "amenities": [
+        "Beach access",
+        "Pool",
+        "Water sports"
+      ],
+      "description": "Palm-lined white sand beach with relaxed all-day dining."
+    },
+    {
+      "id": 6,
+      "name": "Lakeview Naivasha Camp",
+      "city": "Naivasha",
+      "pricePerNight": 95,
+      "rating": 4.4,
+      "emoji": "🦩",
+      "amenities": [
+        "Lake view",
+        "Boat rides",
+        "Breakfast"
+      ],
+      "description": "Tented rooms on the lake shore, perfect for a weekend escape."
+    },
+    {
+      "id": 7,
+      "name": "Mara Horizon Camp",
+      "city": "Maasai Mara",
+      "pricePerNight": 260,
+      "rating": 4.9,
+      "emoji": "🦁",
+      "amenities": [
+        "Game drives",
+        "Full board",
+        "Guided walks"
+      ],
+      "description": "Luxury tented camp on the edge of the reserve with daily game drives."
+    },
+    {
+      "id": 8,
+      "name": "Kisumu Lakeside Inn",
+      "city": "Kisumu",
+      "pricePerNight": 60,
+      "rating": 4,
+      "emoji": "🌅",
+      "amenities": [
+        "Wi-Fi",
+        "Lake view",
+        "Restaurant"
+      ],
+      "description": "Budget-friendly rooms with sunset views over Lake Victoria."
+    }
+  ],
+  "bookings": []
+}

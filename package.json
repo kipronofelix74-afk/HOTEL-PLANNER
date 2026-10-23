@@ -1,5 +1,8 @@
 {
-  "dependencies": {
-    "json-server": "^1.0.0-beta.15"
+  "name": "hotel-stay-planner",
+  "version": "1.0.0",
+  "scripts": {
+    "api": "npx json-server@0.17.4 --watch db.json --port 3000",
+    "web": "npx serve . -l 5500"
   }
 }
