@@ -4,6 +4,19 @@ const ROOM_MULTIPLIERS = {
   deluxe: 1.3, 
   suite: 1.8, 
 };
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, function (char) {
+    const entities = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    };
+
+    return entities[char];
+  });
+}
 
 let hotels = [];
 let selectedHotel = null;
@@ -25,7 +38,7 @@ const estimatedTotal = document.getElementById("estimatedTotal");
 const form = document.getElementById("plan-form");
 const sortSelect = document.getElementById("sort");
 const priceValue = document.getElementById("price-value");
-const saveBtn = document.getElementById("save-btn");
+const saveBtn =document.getElementById("save-btn");
 
 const guestNameInput = document.getElementById("guest-name");
 const notesInput = document.getElementById("notes");
