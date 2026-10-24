@@ -1,15 +1,4 @@
-/* .container {
-   button: 8px;
-  right: 16px;
-  position: relative;
-  text-align: center;
-  color: white;
-}
 
-/* Bottom left text *
-
-
-/* ===== Hotel Stay Planner: styles ===== */
 :root {
   --navy: #14213d;
   --navy-soft: #22345c;
@@ -30,12 +19,16 @@ body {
   line-height: 1.55;
 }
 
-h1, h2, h3, h4, h5, .navbar-brand {
+h1,
+h2,
+h3,
+h4,
+h5,
+.navbar-brand {
   font-family: "Playfair Display", Georgia, serif;
   color: var(--navy);
 }
 
-/* ===== Navbar ===== */
 .site-nav {
   background: var(--navy);
   padding: 0.85rem 0;
@@ -44,57 +37,86 @@ h1, h2, h3, h4, h5, .navbar-brand {
   z-index: 1030;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
 }
+
 .site-nav .navbar-brand {
   color: #fff;
   font-size: 1.4rem;
   letter-spacing: 0.3px;
 }
+
 .site-nav .nav-link-contact {
   color: var(--gold);
   text-decoration: none;
   font-weight: 600;
   border: 1px solid var(--gold);
   padding: 0.35rem 1rem;
-  border-radius: 50rem;
-  transition: all 0.2s ease;
-}
-.site-nav .nav-link-contact:hover {
-  background: var(--gold);
-  color: var(--navy);
+  border-radius: 0.5rem;
 }
 
-/* ===== Hero ===== */
 .hero {
   position: relative;
-  min-height: 340px;
+  max-width: 1140px;
+  margin: 0 auto;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.hero img {
+  display: block;
+  width: 100%;
+  height: clamp(220px, 40vw, 420px);
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0, 0) 70%
+  );
   color: #fff;
-  background:
-    linear-gradient(135deg, rgba(20, 61, 27, 0.78), rgba(20, 33, 61, 0.35)),
-    url("image 1.jpg") center / cover no-repeat,
-    var(--navy-soft);
 }
-.hero h1 {
+
+.hero-overlay h1 {
   color: #fff;
-  font-size: clamp(2rem, 5vw, 3.4rem);
-  font-weight: 700;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+  margin: 0;
+  font-size: clamp(1.4rem, 4vw, 2.4rem);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
+
 .hero p {
   font-size: 1.15rem;
   max-width: 34rem;
   opacity: 0.92;
 }
+
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
 .btn-gold {
+  display: inline-block;
   background: var(--gold);
   border: 0;
   color: var(--navy);
   font-weight: 600;
   padding: 0.7rem 1.6rem;
   border-radius: 50rem;
+  text-decoration: none;
   transition: transform 0.2s ease, background 0.2s ease;
 }
+
 .btn-gold:hover {
   background: var(--gold-dark);
   color: #fff;
@@ -105,38 +127,53 @@ main {
   padding-top: 2.5rem;
   padding-bottom: 2rem;
 }
+
 .card {
   border: 0;
   border-radius: var(--radius);
   background: #fff;
   box-shadow: var(--shadow-sm);
 }
+
+#hotel-list .card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#hotel-list .card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
 .planner {
+  position: sticky;
   top: 5.5rem;
   border-top: 4px solid var(--navy);
 }
+
 .form-label {
   font-weight: 600;
   font-size: 0.85rem;
   color: var(--navy);
   margin-bottom: 0.25rem;
 }
+
 .form-control,
 .form-select {
   border-radius: 0.6rem;
   border: 1px solid #d8d8e0;
   padding: 0.55rem 0.8rem;
 }
+
 .form-control:focus,
 .form-select:focus {
   border-color: var(--gold);
   box-shadow: 0 0 0 0.2rem rgba(201, 162, 75, 0.25);
 }
+
 .form-range {
-  accent-color: var(--bs-btn-active-bg);
+  accent-color: var(--gold);
 }
 
-/* ===== Buttons ===== */
 .btn-primary {
   --bs-btn-bg: var(--navy);
   --bs-btn-border-color: var(--navy);
@@ -150,6 +187,7 @@ main {
   font-weight: 600;
   padding: 0.65rem 1rem;
 }
+
 .btn-outline-primary {
   --bs-btn-color: var(--navy);
   --bs-btn-border-color: var(--navy);
@@ -158,14 +196,14 @@ main {
   border-radius: 0.6rem;
 }
 
-
 .section-title {
   position: relative;
   padding-bottom: 0.6rem;
   margin-bottom: 1.25rem;
 }
+
 .section-title::after {
-  content: "🏨 Hotel Stay Planner Browse, plan and save your stay ";
+  content: "";
   position: absolute;
   left: 0;
   bottom: 0;
@@ -175,27 +213,68 @@ main {
   border-radius: 2px;
 }
 
+#transactions {
+  scroll-margin-top: 2rem;
+}
+
+#transactions .table {
+  min-width: 850px;
+}
+
+#transactions .table th {
+  white-space: nowrap;
+  font-size: 0.85rem;
+}
+
+#transactions .table td {
+  font-size: 0.9rem;
+}
+
+#transactions .badge {
+  font-weight: 600;
+  padding: 0.45rem 0.65rem;
+}
+
+#estimate {
+  color: var(--navy);
+  background: #f6f4ef;
+  border-left: 4px solid var(--gold);
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+}
 
 .site-footer {
   background: var(--navy);
   color: rgba(255, 255, 255, 0.75);
   margin-top: 3rem;
 }
-.btn-gold {
-  background: var(--gold);
-  border: 0;
-  color: var(--navy);
-  font-weight: 600;
-  padding: 0.7rem 1.6rem;
-  border-radius: 50rem;
-  transition: transform 0.2s ease, background 0.2s ease;
+
+.site-footer a {
+  color: var(--gold);
 }
-.btn-gold:hover {
-  background: var(--gold-dark);
-  color: #fff;
-  transform: translateY(-2px);
-}
+
 @media (max-width: 575.98px) {
-  .hero { min-height: 280px; }
-  .planner { top: 0; }
+  .hero {
+    border-radius: 14px;
+  }
+
+  .hero-overlay {
+    padding: 1rem;
+  }
+
+  .hero-buttons {
+    gap: 0.5rem;
+  }
+
+  .btn-gold {
+    padding: 0.55rem 1rem;
+  }
+
+  .planner {
+    position: static;
+  }
+
+  main {
+    padding-top: 1.5rem;
+  }
 }

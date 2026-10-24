@@ -1,35 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Hotel Stay Planner</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="index.css" />
+  <style>
+    body {
+      background: #e0e0e0;
+    }
+    .estimate {
+      font-weight: 600;
+    }
+    .hero {
+      position: relative;
+      max-width: 1140px;
+      margin: 0 auto;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    }
+    .hero img {
+      display: block;
+      width: 100%;
+      height: clamp(220px, 40vw, 420px);
+      object-fit: cover;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 1.5rem;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0) 60%);
+      color: #fff;
+    }
+    .hero-overlay h1 {
+      margin: 0;
+      font-size: clamp(1.4rem, 4vw, 2.4rem);
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .btn-gold {
+      background: #e9a24b;
+      color: #3a2a10;
+      border: none;
+      border-radius: 999px;
+      padding: 0.6rem 1.4rem;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    }
+    .btn-gold:hover {
+      background: #f2b562;
+      color: #3a2a10;
+    }
+  </style>
 </head>
 <body>
-  <nav class="">
-    <div class="container">
-      <span class="navbar-brand text-black fs-9-bold"> 🏨 Hotel Stay Planner</span>
-      <style>
-        body {
-         background: #e0e0e0;
-        border-radius: 40px;
-           box-shadow: 20px 20px 40px #adadad,
-          -20px -20px 40px #ffffff;
-      }
-
-     </style>
-      <span class="save "> Browse, plan and save your stay</span>
-  <img src="image 1.jpg" class="img-fluid" alt="Responsive image">
-  <div class="btn btn-gold">Book and plan today</div>
-  <div class="btn btn-gold">contact us</div>
+  <nav class="py-3">
+    <div class="container d-flex flex-wrap align-items-center gap-3">
+      <span class="navbar-brand text-black fw-bold fs-4">🏨 Hotel Stay Planner</span>
+      <span class="text-muted">Browse, plan and save your stay</span>
     </div>
   </nav>
 
-  <main class="contat-blue-500 container my-4">
+  <header class="hero container px-0">
+    <img src="image%201.jpg" alt="Hotel swimming pool with sun loungers" />
+    <div class="hero-overlay">
+      <h1>Find your perfect stay</h1>
+      <div class="hero-buttons">
+        <a href="#hotel-list" class="btn btn-gold">Book and plan today</a>
+        <a href="#contact" class="btn btn-gold">Contact us</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container my-4">
     <div id="alert-area" aria-live="polite"></div>
 
     <div class="row g-4">
-  
       <section class="col-lg-8">
         <div class="card p-3 mb-3">
           <div class="row g-3">
@@ -55,7 +113,8 @@
                 <option value="price-desc">Price ↓</option>
                 <option value="rating">Rating</option>
               </select>
-            
+            </div>
+          </div>
         </div>
 
         <div id="loading" class="text-center py-5 d-none">
@@ -104,10 +163,10 @@
               <textarea id="notes" class="form-control" rows="2" placeholder="Late arrival, dietary needs…"></textarea>
             </div>
 
-            <div class="estimate mb-3" id="estimate">Estimated total: —</div>
-            <button id="save-btn" type="submit" class="btn btn-primary w-100" disabled>Save planned stay
-
-            </button>
+            <div Estimated total:
+           id="total-price">KSh 0</span>></p>
+            </div>
+            <button id="save-btn" type="submit" class="btn btn-primary w-100" disabled>Save planned stay</button>
           </form>
         </div>
       </aside>
@@ -119,10 +178,12 @@
     </section>
   </main>
 
-  <footer class="text-center small py-4">
-© Hotel Stay Planner. All rights reserved.
-Back to top ↑</footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script type="module" src="index.js"></script>
+  <footer id="contact" class="text-center small py-4">
+    <span id="year"></span> Hotel Stay Planner. All rights reserved.
+    <a href="#">Back to top ↑</a>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="index.js"></script>
 </body>
 </html>

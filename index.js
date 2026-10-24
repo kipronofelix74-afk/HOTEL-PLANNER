@@ -1,6 +1,13 @@
-const API_URL = "https:https://kipronofelix74-afk.github.io/HOTEL-PLANNER/";
-const ROOM_MULTIPLIERS ="https://jsonplaceholder.typicode.com/posts"
- 
+const API_URL = "json-server --watch db.json --port 3000";
+const ROOM_MULTIPLIERS = {
+  standard: 1,
+  deluxe: 1.3, 
+  suite: 1.8, 
+};
+
+let hotels = [];
+let selectedHotel = null;
+
 const hotelList = document.getElementById("hotel-list");
 const bookingsList = document.getElementById("bookings-list");
 const loading = document.getElementById("loading");
@@ -14,9 +21,14 @@ const checkOut = document.getElementById("check-out");
 const guestsInput = document.getElementById("guests");
 const roomType = document.getElementById("room-type");
 const estimate = document.getElementById("estimate");
-const form = document.getElementById("planner-form");
+const estimatedTotal = document.getElementById("estimatedTotal");
+const form = document.getElementById("plan-form");
+const sortSelect = document.getElementById("sort");
+const priceValue = document.getElementById("price-value");
 const saveBtn = document.getElementById("save-btn");
 
+const guestNameInput = document.getElementById("guest-name");
+const notesInput = document.getElementById("notes");
 function showAlert(message, type = "danger") {
   alertArea.innerHTML = `
     <div class="alert alert-${type} alert-dismissible fade show" role="alert">
@@ -56,12 +68,11 @@ async function request(path, options = {}) {
   return response.json().catch(() => ({}));
 }
 
-// ---------- GET: hotels ----------
 async function loadHotels() {
   loading.classList.remove("d-none");
   try {
     hotels = await request("/hotels");
-    populateCities();
+    populateAvailableCities();
     renderHotels();
   } catch (error) {
     hotelList.innerHTML = "";
@@ -71,7 +82,7 @@ async function loadHotels() {
   }
 }
 
-function populateCities() {
+function populateAvailableCities() {
   const cities = [...new Set(hotels.map((h) => h.city))].sort();
   cityFilter.innerHTML =
     `<option value="all">All cities</option>` +
@@ -81,17 +92,22 @@ function populateCities() {
 function getVisibleHotels() {
   const term = searchInput.value.trim().toLowerCase();
   const city = cityFilter.value;
-  const maxPrice = Number(priceFilter.value);
+  const maxPrice = Number(priceFilter.value) || Infinity;
 
-  let result = hotels.filter((h) => {
+  const result = hotels.filter((h) => {
     const matchesTerm =
       !term ||
       h.name.toLowerCase().includes(term) ||
-      h.amenities.some((a) => a.toLowerCase().includes(term));
+      (h.amenities || []).some((a) => a.toLowerCase().includes(term));
     const matchesCity = city === "all" || h.city === city;
     return matchesTerm && matchesCity && h.pricePerNight <= maxPrice;
   });
 
+  const sort = sortSelect.value;
+  if (sort === "price-asc") result.sort((a, b) => a.pricePerNight - b.pricePerNight);
+  if (sort === "price-desc") result.sort((a, b) => b.pricePerNight - a.pricePerNight);
+  if (sort === "rating") result.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+  return result;
 }
 
 function renderHotels() {
@@ -101,9 +117,29 @@ function renderHotels() {
     return;
   }
 
+  hotelList.innerHTML = visible
+    .map((h) => {
+      const isSelected = selectedHotel && String(selectedHotel.id) === String(h.id);
+      return `
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 ${isSelected ? "border-primary" : ""}">
+          <div class="card-body">
+            <h3 class="h6">${escapeHtml(h.name)} <small class="text-muted">· ${escapeHtml(h.city)}</small></h3>
+            <p class="small mb-1">$${h.pricePerNight}/night</p>
+            <p class="small text-muted mb-2">${(h.amenities || []).map(escapeHtml).join(", ")}</p>
+            <button class="btn btn-primary btn-sm" data-plan="${h.id}">
+              ${isSelected ? "Selected" : "Plan a stay"}
+            </button>
+          </div>
+        </div>
+      </div>`;
+    })
+    .join("");
+}
+
 // ---------- Planner ----------
 function selectHotel(id) {
-  selectedHotel = hotels.find((h) => h.id === id) || null;
+  selectedHotel = hotels.find((h) => String(h.id) === String(id)) || null;
   if (!selectedHotel) return;
   selectedHotelText.innerHTML = `<strong>${escapeHtml(selectedHotel.name)}</strong> · ${escapeHtml(selectedHotel.city)} · $${selectedHotel.pricePerNight}/night`;
   saveBtn.disabled = false;
@@ -118,7 +154,8 @@ function calculateTotal() {
   const guests = Number(guestsInput.value);
   if (nights <= 0 || !guests || guests < 1) return null;
   const rooms = Math.ceil(guests / 2);
-  const total = nights * selectedHotel.pricePerNight * ROOM_MULTIPLIERS[roomType.value] * rooms;
+  const multiplier = ROOM_MULTIPLIERS[roomType.value] ?? 1;
+  const total = nights * selectedHotel.pricePerNight * multiplier * rooms;
   return { nights, rooms, total: Math.round(total) };
 }
 
@@ -129,6 +166,14 @@ function updateEstimate() {
     : "Estimated total: —";
 }
 
+function validateForm() {
+  if (!selectedHotel) return "Please pick a hotel first.";
+  if (guestNameInput && !guestNameInput.value.trim()) return "Please enter the guest name.";
+  if (!checkIn.value || !checkOut.value) return "Please choose check-in and check-out dates.";
+  if (checkIn.value < today()) return "Check-in cannot be in the past.";
+  if (nightsBetween(checkIn.value, checkOut.value) <= 0) return "Check-out must be after check-in.";
+  if (!Number(guestsInput.value) || Number(guestsInput.value) < 1) return "Guests must be at least 1.";
+  return null;
 }
 async function saveBooking(event) {
   event.preventDefault();
@@ -137,6 +182,23 @@ async function saveBooking(event) {
     showAlert(problem, "warning");
     return;
   }
+
+  const calc = calculateTotal();
+  const booking = {
+    hotelId: selectedHotel.id,
+    hotelName: selectedHotel.name,
+    city: selectedHotel.city,
+    guestName: guestNameInput ? guestNameInput.value.trim() : "",
+    checkIn: checkIn.value,
+    checkOut: checkOut.value,
+    nights: calc.nights,
+    guests: Number(guestsInput.value),
+    rooms: calc.rooms,
+    roomType: roomType.value,
+    notes: notesInput ? notesInput.value.trim() : "",
+    total: calc.total,
+  };
+
   saveBtn.disabled = true;
   saveBtn.textContent = "Saving…";
   try {
@@ -157,6 +219,7 @@ async function saveBooking(event) {
     saveBtn.textContent = "Save planned stay";
   }
 }
+
 async function loadBookings() {
   try {
     const bookings = await request("/bookings");
@@ -174,7 +237,7 @@ function renderBookings(bookings) {
   }
   bookingsList.innerHTML = bookings
     .map(
-      (b) => 
+      (b) => `
     <div class="col-md-6 col-lg-4">
       <div class="card h-100">
         <div class="card-body">
@@ -189,10 +252,12 @@ function renderBookings(bookings) {
           </div>
         </div>
       </div>
-    </div>
+    </div>`
+    )
     .join("");
 }
 
+// ---------- DELETE ----------
 async function deleteBooking(id) {
   try {
     await request(`/bookings/${id}`, { method: "DELETE" });
@@ -202,21 +267,122 @@ async function deleteBooking(id) {
     showAlert(error.message);
   }
 }
+
+
 hotelList.addEventListener("click", (e) => {
   const btn = e.target.closest("[data-plan]");
-  if (btn) selectHotel(Number(btn.dataset.plan));
+  if (btn) selectHotel(btn.dataset.plan);
 });
 bookingsList.addEventListener("click", (e) => {
   const btn = e.target.closest("[data-delete]");
   if (btn) deleteBooking(btn.dataset.delete);
 });
 searchInput.addEventListener("input", renderHotels);
-[checkIn, checkOut, guestsInput, roomType].forEach((el) =>
-  el.addEventListener("change", updateEstimate)
-);
+cityFilter.addEventListener("change", renderHotels);
+priceFilter.addEventListener("input", () => {
+  priceValue.textContent = priceFilter.value;
+  renderHotels();
+});
+document.addEventListener("DOMContentLoaded", () => {
+  const checkIn = document.getElementById("checkIn");
+  const checkOut = document.getElementById("checkOut");
+  const nightlyPrice = document.getElementById("nightlyPrice");
+  const stayNights = document.getElementById("stayNights");
 
-form.addEventListener("submit", saveBooking);
+  const estimatedTotal = document.getElementById("estimatedTotal");
 
+  if (!checkIn || !checkOut || !nightlyPrice ||
+      !stayNights || !estimatedTotal) {
+    console.error("Hotel price calculator: required HTML elements are missing.");
+    return;
+  }
+
+  const money = new Intl.NumberFormat("en-KE", {
+    style: "currency",
+    currency: "KES",
+    maximumFractionDigits: 2
+  });
+
+  // Use UTC dates to avoid daylight-saving and time-zone
+  // differences affecting the number of nights.
+  function parseDate(value) {
+    if (!value) return null;
+
+    const date = new Date(`${value}T00:00:00Z`);
+
+    return Number.isNaN(date.getTime()) ||
+      date.toISOString().slice(0, 10) !== value
+      ? null
+      : date;
+  }
+
+  function calculateTotal() {
+    const start = parseDate(checkIn.value);
+    const end = parseDate(checkOut.value);
+    const price = nightlyPrice.value.trim() === ""
+      ? NaN
+      : Number(nightlyPrice.value);
+
+    // Clear the estimate until valid details are provided.
+    estimatedTotal.textContent = "Estimated total: —";
+
+    if (!start || !end) {
+      stayNights.textContent =
+        "Select check-in and check-out dates.";
+      return;
+    }
+
+    if (end <= start) {
+      stayNights.textContent =
+        "Check-out must be after check-in.";
+      return;
+    }
+
+    const nights = Math.round(
+      (end.getTime() - start.getTime()) / 86400000
+    );
+
+    stayNights.textContent =
+      `${nights} night${nights === 1 ? "" : "s"}`;
+
+    if (!Number.isFinite(price) || price < 0) {
+      stayNights.textContent +=
+        " — enter a valid nightly price.";
+      return;
+    }
+
+    const total = nights * price;
+
+    estimatedTotal.textContent =
+      `Estimated total: ${money.format(total)}`;
+  }
+
+  [checkIn, checkOut, nightlyPrice].forEach(input => {
+    input.addEventListener("input", calculateTotal);
+    input.addEventListener("change", calculateTotal);
+  });
+  const today = new Date();
+  const localToday = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, "0"),
+    String(today.getDate()).padStart(2, "0")
+  ].join("-");
+
+  checkIn.min = localToday;
+
+  checkIn.addEventListener("change", () => {
+    checkOut.min = checkIn.value || localToday;
+
+    if (checkOut.value && checkOut.value <= checkIn.value) {
+      checkOut.value = "";
+    }
+
+    calculateTotal();
+  });
+
+  checkOut.min = checkIn.value || localToday;
+  calculateTotal();
+});
 const yearEl = document.getElementById("year");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 checkIn.min = today();
